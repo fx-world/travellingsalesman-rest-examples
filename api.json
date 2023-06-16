@@ -1,0 +1,185 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "The Travelling Salesman",
+    "description" : "Solve the travelling salesman problem for every 2D or 3D problem, and calculate the shortest distance between a list of points.",
+    "contact" : {
+      "name" : "fx-world Softwareentwicklung Pascal Weyprecht",
+      "url" : "http://fx-world.de",
+      "email" : "support@fx-world.de"
+    },
+    "license" : {
+      "name" : "General Terms and Conditions",
+      "url" : "http://fx-world.de/apis"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "travelling-salesman.p.rapidapi.com",
+    "description" : "Default Server URL"
+  } ],
+  "paths" : {
+    "/tsm/solve" : {
+      "post" : {
+        "tags" : [ "travelling-salesman-controller" ],
+        "operationId" : "solve",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Problem"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Solution"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tsm/exampleProblem" : {
+      "get" : {
+        "tags" : [ "travelling-salesman-controller" ],
+        "operationId" : "exampleProblem",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "ExampleProblem"
+          }
+        }, {
+          "name" : "edgeType",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "Euclidean2D",
+            "enum" : [ "DistanceMatrix", "Euclidean2D", "Euclidean3D", "Manhattan2D", "Manhattan3D", "Chebyshev2D", "Chebyshev3D" ]
+          }
+        }, {
+          "name" : "locationCount",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 10
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Location" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "x" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "y" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "z" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }
+      },
+      "Problem" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "locationCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "distances" : {
+            "type" : "array",
+            "items" : {
+              "type" : "number",
+              "format" : "double"
+            }
+          },
+          "locations" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Location"
+            }
+          },
+          "edgeType" : {
+            "type" : "string",
+            "enum" : [ "DistanceMatrix", "Euclidean2D", "Euclidean3D", "Manhattan2D", "Manhattan3D", "Chebyshev2D", "Chebyshev3D" ]
+          }
+        }
+      },
+      "Solution" : {
+        "type" : "object",
+        "properties" : {
+          "distance" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "locations" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -2,6 +2,10 @@
 
 Examples for the travelling salesman rest api
 
+## OpenAPI Definition
+
+See [api.json](api.json)
+
 ## Edge Types
 
 * DistanceMatrix
